@@ -20,7 +20,7 @@ This procedure will allow the classifications. This entire classification proced
 
 
 
-The database used for the tests is available [here](ddd)
+The database used for the tests is available [here](Pre-processing.jpg)
 
 
 # General architecture of the method based on Benford's law
