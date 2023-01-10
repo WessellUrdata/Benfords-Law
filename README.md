@@ -42,7 +42,7 @@ The processing phase consists of two steps. The first step consists in counting 
 | CNN | 0.9970 | 0.9966 | 0.9968 | 0.9967 | 06:36:00 |
 | BL - Pearson | 0.8644 | 0.9474 | 0.9040 | 0.8993 | 00:25:23 |
 
-| First Header  | Second Header |
+| Model  | PR | RE | F1 | AC | Time | 
 | ------------- | ------------- |
 | Content Cell  | Content Cell  |
 | Content Cell  | Content Cell  |
