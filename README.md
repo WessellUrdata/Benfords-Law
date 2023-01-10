@@ -36,6 +36,7 @@ The processing phase consists of two steps. The first step consists in counting 
 
 
 # Benchmark results
+
 | Model | PR | RE | F1 | AC | Time |
 | ------------ | ------------ | ------------ | ------------ | ------------ |
 | DFT with SVM | 0.9965 | 0.9941 | 0.9953 | 0.9951 | 00:00:51 |
