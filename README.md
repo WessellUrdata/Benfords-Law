@@ -17,9 +17,6 @@ This procedure will allow the classifications. This entire classification proced
 
 ![Dataset](Dataset.jpg)
 
-
-
-
 The database used for the tests is available [here]
 
 
