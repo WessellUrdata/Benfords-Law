@@ -25,7 +25,7 @@ The database used for the tests is available [here]
 
 # General architecture of the method based on Benford's law
 
-(Pre-processing.jpg)
+!Pre-processing.jpg
 
 The pre-processing depicted in Figure consists in extracting a set of $n$ features from the images by applying the DFT (Discrete Fourier Transform) method. For this, a Python script was built, where besides the standard libraries (\textt{NumPy}, \textt{pickle}), the libraries \textt{OpenCV} were used to process the image. A script was built for the radial profiling function, whose main function is to create a circular boundary in the image, extracting only the features within the circular zone. The extracted data is stored in a dataset, where through the development of a script built in MatLab, the first digit of all the obtained values was extracted and subsequently stored in a digit matrix.
 
