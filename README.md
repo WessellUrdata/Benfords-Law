@@ -54,7 +54,7 @@ This dataset only contains photos.
 The final dataset is labelled correctly and consists of 9000 manipulated photographs labelled 0 and 9000 authentic photos labelled 1. 
 If you wish to test the model with the dataset used, please send an e-mail to Pedro.Fernandes@lit.ie 
 
-#Results obtained after extracting 200, 500 and 1000 features from the images dataset, using Pearson
+# Results obtained after extracting 200, 500 and 1000 features from the images dataset, using Pearson
 
 |  | TP | TN | FP| FN | PR | RE | F1 | AC | 
 | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
@@ -72,7 +72,7 @@ If you wish to test the model with the dataset used, please send an e-mail to Pe
 | CNN | 0.9970 | 0.9966 | 0.9968 | 0.9967 | 06:36:00 |
 | BL - Pearson | 0.8644 | 0.9474 | 0.9040 | 0.8993 | 00:25:23 |
 
-#Publications
+# Publications
 
 + Benford's Law Applied to Digital Forensic Analysis, Forensic Science International: Digital Investigation. [Soon]
 
