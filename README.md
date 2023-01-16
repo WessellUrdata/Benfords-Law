@@ -35,7 +35,7 @@ The processing phase consists of two steps. The first step consists in counting 
 ![Benford curve](Benfordcurve.jpg)
 
 
-#Dataset to evaluate the proposed model
+# Dataset to evaluate the proposed model
 
 The table below details the datasets collected and used in the experiments.
 
