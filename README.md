@@ -35,7 +35,7 @@ The processing phase consists of two steps. The first step consists in counting 
 ![Benford curve](Benfordcurve.jpg)
 
 
-# Dataset to evaluate the proposed model
+#Dataset to evaluate the proposed model
 
 The table below details the datasets collected and used in the experiments.
 
@@ -52,7 +52,7 @@ The table below details the datasets collected and used in the experiments.
 Important note: 
 This dataset only contains photos.
 The final dataset is labelled correctly and consists of 9000 manipulated photographs labelled 0 and 9000 authentic photos labelled 1. 
-You can find the final dataset [here]() 
+If you wish to test the model with the dataset used, please send an e-mail to Pedro.Fernandes@lit.ie 
 
 #Results obtained after extracting 200, 500 and 1000 features from the images dataset, using Pearson
 
@@ -72,7 +72,9 @@ You can find the final dataset [here]()
 | CNN | 0.9970 | 0.9966 | 0.9968 | 0.9967 | 06:36:00 |
 | BL - Pearson | 0.8644 | 0.9474 | 0.9040 | 0.8993 | 00:25:23 |
 
+#Publications
 
++ Benford's Law Applied to Digital Forensic Analysis, Forensic Science International: Digital Investigation. [Soon]
 
 
 
