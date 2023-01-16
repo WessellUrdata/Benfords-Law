@@ -35,6 +35,35 @@ The processing phase consists of two steps. The first step consists in counting 
 ![Benford curve](Benfordcurve.jpg)
 
 
+# Dataset to evaluate the proposed model
+
+The table below details the datasets collected and used in the experiments.
+
+| Name | Fake | Real | 
+| ---- | ---- | ---- | 
+| [Columbia Image Splicing Dataset](https://www.ee.columbia.edu/ln/dvmm/downloads/AuthSplicedDataSet/AuthSplicedDataSet.htm) | 180 | 180 | 
+| [Coverage Dataset](https://github.com/wenbihan/coverage) | 100 | 100 |  
+| [CelebA-HQ Dataset](https://arxiv.org/abs/1710.10196) | - | 8600 |  
+| [This person does not exist] (https://thispersondoesnotexist.com/)| 120 | - |  
+| [100K-Faces-HQ Dataset](https://generated.photos/) | 8600 | - |  
+| [Flickr-Faces-HQ Dataset](https://arxiv.org/abs/1812.04948) | - | 120 |  
+| Total | 9000 | 9000 |  |
+
+Important note: 
+This dataset only contains photos.
+The final dataset is labelled correctly and consists of 9000 manipulated photographs labelled 0 and 9000 authentic photos labelled 1. 
+You can find the final dataset [here]() 
+
+#Results obtained after extracting 200, 500 and 1000 features from the images dataset, using Pearson
+
+|  | TP | TN | FP| FN | PR | RE | F1 | AC | 
+| ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |
+| 200 | 8529 | 7628 | 1372 | 471 | 0.8614 | 0.9477 | 0.9025 | 0.8976 |
+| 500 | 8529 | 7686 | 1314 | 471 | 0.8665 | 0.9477 | 0.9053 | 0.9008 |
+| 1000 | 8521 | 7674 | 1326 | 479 | 0.8653 | 0.9468 | 0.9042 |  0.8997 |
+| Mean | 8526 | 7662 | 1337 | 474 | 0.8644 | 0.9474 | 0.9040 |  0.8993 |
+
+
 # Benchmark results
 
 | Model | PR | RE | F1 | AC | Time |
