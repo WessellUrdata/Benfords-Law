@@ -44,7 +44,7 @@ The table below details the datasets collected and used in the experiments.
 | [Columbia Image Splicing Dataset](https://www.ee.columbia.edu/ln/dvmm/downloads/AuthSplicedDataSet/AuthSplicedDataSet.htm) | 180 | 180 | 
 | [Coverage Dataset](https://github.com/wenbihan/coverage) | 100 | 100 |  
 | [CelebA-HQ Dataset](https://arxiv.org/abs/1710.10196) | - | 8600 |  
-| [This person does not exist] (https://thispersondoesnotexist.com/)| 120 | - |  
+| [This person does not exist](https://thispersondoesnotexist.com/)| 120 | - |  
 | [100K-Faces-HQ Dataset](https://generated.photos/) | 8600 | - |  
 | [Flickr-Faces-HQ Dataset](https://arxiv.org/abs/1812.04948) | - | 120 |  
 | Total | 9000 | 9000 |  |
