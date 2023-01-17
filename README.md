@@ -38,6 +38,7 @@ The processing phase consists of two steps. The first step consists in counting 
 # Dataset to evaluate the proposed model
 
 The table below details the datasets collected and used in the experiments.
+This table was obtained from the Dataset of Sara Ferreira, which you can consult [here](https://github.com/saraferreirascf/Photos-Videos-Manipulations-Dataset).
 
 | Name | Fake | Real | 
 | ---- | ---- | ---- | 
@@ -74,7 +75,7 @@ If you wish to test the model with the dataset used, please send an e-mail to Pe
 
 # Publications
 
-+ Benford's Law Applied to Digital Forensic Analysis, Forensic Science International: Digital Investigation. [Soon]
+
 
 
 
