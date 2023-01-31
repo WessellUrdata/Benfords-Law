@@ -75,7 +75,7 @@ If you wish to test the model with the dataset used, please send an e-mail to Pe
 
 # Publications
 
-Benford's law applied to digital forensic analysis, FSI: Digital Investigation, doi.org/10.1016/j.fsidi.2023.301515
++ Benford's law applied to digital forensic analysis, FSI: Digital Investigation, doi.org/10.1016/j.fsidi.2023.301515
 , [URL](https://doi.org/10.1016/j.fsidi.2023.301515)
 
 Pedro Fernandes and Mário Antunes
