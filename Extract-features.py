@@ -1,156 +1,71 @@
-import cv2
 import numpy as np
-import numpy.matlib
 import os
-import radialProfile
-import glob
-from matplotlib import pyplot as plt
 import pickle
-from scipy.interpolate import griddata
-import pylab as py
-import rp
-import sys
+from icecream import ic
 
-if(len(sys.argv) != 5):
-        print("Not enough arguments")
-        print("insert <dir> <features> <max_files> <output filename>")
-        exit()
+from ImageForensics import FeatureExtraction
 
-dir=sys.argv[1]
 
-if os.path.isdir(dir) is False:
-        print("this directory does not exist")
+def main(args):
+    dir_fake = args.fake_dir
+    dir_real = args.real_dir
+    N = args.features
+    output_filename = args.output_filename + ".pkl"
+
+    data = {}
+
+    if not (os.path.isdir(dir_fake) and os.path.isdir(dir_real)):
+        print("the specified directories do not exist")
         exit(0)
 
-N=int(sys.argv[2])
-number_iter=int(sys.argv[3])
-output_filename=str(sys.argv[4])+".pkl"
+    # Collect all file paths
+    fake_files = [
+        os.path.join(subdir, file)
+        for subdir, dirs, files in os.walk(dir_fake)
+        for file in files
+    ]
+    real_files = [
+        os.path.join(subdir, file)
+        for subdir, dirs, files in os.walk(dir_real)
+        for file in files
+    ]
 
-data= {}
+    extract = FeatureExtraction(features=N)
 
-y = []
+    psd1D_total_fake = extract.fft_modified(fake_files)
+    psd1D_total_real = extract.fft_modified(real_files)
 
-psd1D_total = np.zeros([number_iter, N])
-label_total = np.zeros([number_iter])
-psd1D_org_mean = np.zeros(N)
+    # Remove None results if any files failed to process
+    psd1D_total_fake = [result for result in psd1D_total_fake if result is not None]
+    psd1D_total_real = [result for result in psd1D_total_real if result is not None]
 
-cont = 0
+    label_total_fake = np.zeros(len(psd1D_total_fake))
+    label_total_real = np.ones(len(psd1D_total_real))
 
-#fake data
-rootdir = dir+"/fake"
+    psd1D_total_final = np.concatenate((psd1D_total_fake, psd1D_total_real), axis=0)
+    label_total_final = np.concatenate((label_total_fake, label_total_real), axis=0)
 
-for subdir, dirs, files in os.walk(rootdir):
+    data["data"] = psd1D_total_final
+    data["label"] = label_total_final
+    data["N"] = N
 
-    for file in files:        
-        filename = os.path.join(subdir, file)
+    output = open(output_filename, "wb")
+    pickle.dump(data, output)
+    output.close()
 
-        if filename==dir+"/fake"+"\desktop.ini":
-            continue
-       
-        img = cv2.imread(filename,0)
-        
-        # we crop the center
-        h = int(img.shape[0]/3)
-        w = int(img.shape[1]/3)
-        img = img[h:-h,w:-w] 
-
-
-        f = np.fft.fft2(img)
-        fshift = np.fft.fftshift(f)
-
-
-        magnitude_spectrum = np.abs(fshift)
-        psd1D = rp.radial_profile(magnitude_spectrum)
-        
-        points = np.linspace(0,N,num=psd1D.size) # coordinates of a
-        xi = np.linspace(0,N,num=N) # coordinates for interpolation
-
-        interpolated = griddata(points,psd1D,xi,method='cubic')
- 
-        psd1D_total[cont,:] = interpolated             
-        label_total[cont] = 0
-        cont+=1
-
-        if cont == number_iter:
-                break
-    if cont == number_iter:
-        break
-            
-for x in range(N):
-    psd1D_org_mean[x] = np.mean(psd1D_total[:,x])
-
-## real data
-psd1D_total2 = np.zeros([number_iter, N])
-label_total2 = np.zeros([number_iter])
-psd1D_org_mean2 = np.zeros(N)
-
-cont = 0
-
-rootdir2=dir+"/real"
-
-for subdir, dirs, files in os.walk(rootdir2):
-    for file in files:        
- 
-        filename = os.path.join(subdir, file)
-        parts = filename.split("/")
-
-        if filename==dir+"/real"+"\desktop.ini":
-            break
-        
-        img = cv2.imread(filename,0)
-    
-        # we crop the center
-        h = int(img.shape[0]/3)
-        w = int(img.shape[1]/3)
-        img = img[h:-h,w:-w]
-
-        f = np.fft.fft2(img)
-        fshift = np.fft.fftshift(f)
-        #fshift += epsilon
-       
-
-        magnitude_spectrum = np.abs(fshift)
-
-        # Calculate the azimuthally averaged 1D power spectrum
-        psd1D = rp.radial_profile(magnitude_spectrum)
-
-        points = np.linspace(0,N,num=psd1D.size) # coordinates of a
-        xi = np.linspace(0,N,num=N) # coordinates for interpolation
-
-        interpolated = griddata(points,psd1D,xi,method='cubic')
-        #interpolated /= interpolated[0]
-
-        psd1D_total2[cont,:] = interpolated             
-        label_total2[cont] = 1
-        cont+=1
-        
-
-        #print(interpolated)
-
-        if cont == number_iter:
-            break
-    if cont == number_iter:
-        break
+    print("DATA Saved")
 
 
+if __name__ == "__main__":
+    import argparse
 
-for x in range(N):
-    psd1D_org_mean2[x] = np.mean(psd1D_total2[:,x])
- 
-y.append(psd1D_org_mean)
-y.append(psd1D_org_mean2)
+    parser = argparse.ArgumentParser()
 
+    parser.add_argument("fake_dir", help="Directory where the fake images are stored")
+    parser.add_argument("real_dir", help="Directory where the real images are stored")
+    parser.add_argument("features", type=int, help="Number of features to extract")
+    parser.add_argument("output_filename", help="Name of the output file")
 
-psd1D_total_final = np.concatenate((psd1D_total,psd1D_total2), axis=0)
-label_total_final = np.concatenate((label_total,label_total2), axis=0)
+    args = parser.parse_args()
 
-data["data"] = psd1D_total_final
-data["label"] = label_total_final
-
-
-output = open(output_filename, 'wb')
-pickle.dump(data, output)
-output.close()
-
-print("DATA Saved")
-
+    main(args)
