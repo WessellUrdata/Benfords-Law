@@ -1,0 +1,7 @@
+{
+	"name": "Miniforge",
+	"build": {
+		"context": "..",
+		"dockerfile": "Dockerfile"
+	}
+}

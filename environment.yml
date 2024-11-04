@@ -1,0 +1,10 @@
+name: benford
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12
+  - icecream
+  - matplotlib
+  - numpy
+  - opencv
+  - scipy
