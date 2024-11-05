@@ -3,5 +3,21 @@
 	"build": {
 		"context": "..",
 		"dockerfile": "Dockerfile"
-	}
+	},
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-python.python", // VS Code core Python extension (Yes, this installs Pylance which is proprietary)
+				"charliermarsh.ruff", // Ruff: linter and formatter
+				"ms-toolsai.jupyter" // VS Code Jupyter Notebooks extension
+			],
+			"settings": {
+				"notebook.defaultFormatter": "charliermarsh.ruff",
+				"[python]": {
+					"editor.formatOnSave": true,
+					"editor.defaultFormatter": "charliermarsh.ruff"
+				}
+			}
+		}
+  	}
 }
