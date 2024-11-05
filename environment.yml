@@ -8,3 +8,4 @@ dependencies:
   - numpy
   - opencv
   - scipy
+  - ipykernel # you may add Jupyter if you use that, I'm using VS Code and thus only require the kernel
