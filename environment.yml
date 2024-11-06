@@ -7,5 +7,10 @@ dependencies:
   - matplotlib
   - numpy
   - opencv
+  - pillow
   - scipy
   - ipykernel # you may add Jupyter if you use that, I'm using VS Code and thus only require the kernel
+
+  - pip
+  - pip:
+    - -e ./modules
