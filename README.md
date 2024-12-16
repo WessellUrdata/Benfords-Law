@@ -3,9 +3,9 @@
 This repo contains scripts modified or translated from the Python scripts and MATLAB scripts based on [*Benford's law applied to digital forensic analysis* by Pedro Fernandes and Mário Antunes](https://doi.org/10.1016/j.fsidi.2023.301515), which is available at the [original GitHub repository](https://github.com/Pacfes/Benford-Law).
 
 ## Setup
-The easiest way to get started, provided you have Docker or Podman installed on your machine, is to use Dev Containers. If you are using VS Code, simply open this repository with Dev Container, and you should be ready to go.
 
-Otherwise, if you already have `conda` installed, you can simply activate the environment with the following command:
+If you already have `conda` installed, you can simply activate the environment with the following command:
+
 ```bash
 conda env create -f environment.yml
 conda activate benford
