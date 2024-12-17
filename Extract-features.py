@@ -32,8 +32,8 @@ def main(args):
 
     extract = FeatureExtraction(features=N)
 
-    psd1D_total_fake = extract.fft_modified(fake_files)
-    psd1D_total_real = extract.fft_modified(real_files)
+    psd1D_total_fake = extract.fft(fake_files)
+    psd1D_total_real = extract.fft(real_files)
 
     # Remove None results if any files failed to process
     psd1D_total_fake = [result for result in psd1D_total_fake if result is not None]

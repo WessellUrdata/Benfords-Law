@@ -2,7 +2,7 @@ from functools import partial
 from multiprocessing import Pool, cpu_count
 import cv2
 import numpy as np
-import scipy as sp
+import scipy.interpolate
 
 
 # from radialProfile.py
@@ -50,46 +50,20 @@ class FeatureExtraction:
     def __init__(self, features=100):
         self.features = features
 
-    def fft_original(filename, N):
-        img = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
-
-        # get the center 1/3 of the image
-        height = int(img.shape[0] / 3)
-        width = int(img.shape[1] / 3)
-        img = img[height:-height, width:-width]
-
-        # do FFT and shift zero frequency component to center
-        frequencies = np.fft.fft2(img)
-        frequencies_shifted = np.fft.fftshift(frequencies)
-
-        # calculate magnitude spectrum
-        magnitude_spectrum = np.abs(frequencies_shifted)
-
-        # Calculate the azimuthally averaged 1D power spectrum
-        psd1D = azimuthalAverage(magnitude_spectrum)
-
-        points = np.linspace(0, N, num=psd1D.size)  # coordinates of points in psd1D
-        xi = np.linspace(0, N, num=N)  # coordinates for interpolation
-
-        interpolated = sp.griddata(points, psd1D, xi, method="cubic")
-
-        return interpolated
-
-    def fft_modified(self, filename):
-        with Pool(processes=cpu_count()) as pool:
-            return pool.map(partial(self.fft_modified_singlethread), filename)
-
-    def fft_modified_singlethread(self, filename):
+    def fft(self, filename, crop=True, freq_shift=True, interp="cubic"):
         img = cv2.imread(filename, 0)
 
-        # we crop the center
-        # height = int(img.shape[0] / 3)
-        # width = int(img.shape[1] / 3)
-        # img = img[height:-height, width:-width]
+        if crop:
+            # we crop the center
+            height = int(img.shape[0] / 3)
+            width = int(img.shape[1] / 3)
+            img = img[height:-height, width:-width]
 
-        # do FFT and shift zero frequency component to center
+        # do FFT
         frequencies = np.fft.fft2(img)
-        # frequencies_shifted = np.fft.fftshift(frequencies)
+        # shift zero frequency component to center
+        if freq_shift:
+            frequencies = np.fft.fftshift(frequencies)
 
         # calculate magnitude spectrum
         magnitude_spectrum = np.abs(frequencies)
@@ -104,4 +78,17 @@ class FeatureExtraction:
             0, self.features, num=self.features
         )  # coordinates for interpolation
 
-        return np.interp(xi, points, psd1D)
+        match interp:
+            case "cubic":
+                interpolated = scipy.interpolate.griddata(
+                    points, psd1D, xi, method="cubic"
+                )
+            case "linear":
+                interpolated = np.interp(xi, points, psd1D)
+
+        return interpolated
+
+    def multithread_fft(self, filenames, **kwargs):
+        with Pool(processes=cpu_count()) as pool:
+            results = pool.map(partial(self.fft, **kwargs), filenames)
+        return results
