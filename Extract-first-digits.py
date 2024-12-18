@@ -1,8 +1,9 @@
 import pickle as pkl
-import numpy as np
-from icecream import ic
+
 import matplotlib.pyplot as plt
+import numpy as np
 import scipy.stats as stats
+from icecream import ic
 
 filename = "output.pkl"
 with open(filename, "rb") as f:

@@ -1,8 +1,10 @@
 from functools import partial
 from multiprocessing import Pool, cpu_count
+
 import cv2
 import numpy as np
 import scipy.interpolate
+from tqdm import tqdm
 
 
 # from radialProfile.py

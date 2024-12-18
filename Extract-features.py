@@ -1,8 +1,8 @@
-import numpy as np
 import os
 import pickle
-from icecream import ic
 
+import numpy as np
+from icecream import ic
 from ImageForensics import FeatureExtraction
 
 
