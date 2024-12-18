@@ -18,5 +18,8 @@ dependencies = [
     "imageforensics",
 ]
 
+[tool.uv]
+python-preference = "only-managed"
+
 [tool.uv.sources]
 imageforensics = { path = "modules", editable = true }
