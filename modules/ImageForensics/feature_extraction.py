@@ -54,11 +54,12 @@ class FeatureExtraction:
 
     def fft(self, filename, crop=True, freq_shift=True, interp="cubic"):
         img = cv2.imread(filename, 0)
+        height, width = img.shape[:2]
 
         if crop:
             # we crop the center
-            height = int(img.shape[0] / 3)
-            width = int(img.shape[1] / 3)
+            height = height // 3
+            width = width // 3
             img = img[height:-height, width:-width]
 
         # do FFT
@@ -92,5 +93,11 @@ class FeatureExtraction:
 
     def multithread_fft(self, filenames, **kwargs):
         with Pool(processes=cpu_count()) as pool:
-            results = pool.map(partial(self.fft, **kwargs), filenames)
+            results = list(
+                tqdm(
+                    pool.imap(partial(self.fft, **kwargs), filenames),
+                    total=len(filenames),
+                    desc="Performing FFT",
+                )
+            )
         return results
