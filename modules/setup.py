@@ -6,7 +6,7 @@ setup(
     packages=find_packages(),
     install_requires=[
         "numpy",
-        "opencv-python",
+        "opencv-python-headless",
         "scipy",
         "scikit-learn",
     ],
