@@ -35,7 +35,6 @@ class FeatureExtraction:
         self,
         filename: str,
         crop: bool = True,
-        freq_shift: bool = True,
     ) -> list[float]:
         img = cv2.imread(filename, 0)
         height, width = img.shape[:2]
@@ -49,8 +48,8 @@ class FeatureExtraction:
         # do FFT
         frequencies = np.fft.fft2(img)
         # shift zero frequency component to center
-        if freq_shift:
-            frequencies = np.fft.fftshift(frequencies)
+        # not doing frequency shift will slightly negatively impact accuracy
+        frequencies = np.fft.fftshift(frequencies)
 
         # calculate magnitude spectrum
         magnitude_spectrum = np.abs(frequencies)
