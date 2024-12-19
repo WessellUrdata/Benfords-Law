@@ -36,8 +36,8 @@ class FeatureExtraction:
         filename: str,
         crop: bool = True,
     ) -> list[float]:
-        img = cv2.imread(filename, 0)
-        height, width = img.shape[:2]
+        img = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
+        height, width = img.shape
 
         if crop:
             # we crop the center
@@ -74,7 +74,7 @@ class FeatureExtraction:
                 tqdm(
                     pool.imap(partial(self.fft, **kwargs), filenames),
                     total=len(filenames),
-                    desc="Performing FFT",
+                    desc="Performing Feature Extraction",
                 )
             )
         return results
