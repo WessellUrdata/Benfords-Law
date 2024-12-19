@@ -7,41 +7,20 @@ import scipy.interpolate
 from tqdm import tqdm
 
 
-# from radialProfile.py
-def azimuthalAverage(image, center=None):
-    """
-    Calculate the azimuthally averaged radial profile.
-
-    image - The 2D image
-    center - The [x,y] pixel coordinates used as the center. The default is
-             None, which then uses the center of the image (including
-             fracitonal pixels).
-
-    """
+def azimuthalAverage(magnitude_spectrum: np.ndarray) -> np.ndarray:
     # Calculate the indices from the image
-    y, x = np.indices(image.shape)
+    y, x = np.indices(magnitude_spectrum.shape)
 
-    if not center:
-        center = np.array([(x.max() - x.min()) / 2.0, (y.max() - y.min()) / 2.0])
+    center_y, center_x = ((i - 1) / 2 for i in magnitude_spectrum.shape)
 
-    r = np.hypot(x - center[0], y - center[1])
-
-    # Get sorted radii
-    ind = np.argsort(r.flat)
-    r_sorted = r.flat[ind]
-    i_sorted = image.flat[ind]
+    r = np.hypot(y - center_y, x - center_x)
 
     # Get the integer part of the radii (bin size = 1)
-    r_int = r_sorted.astype(int)
+    r_int = r.astype(int)
 
-    # Find all pixels that fall within each radial bin.
-    deltar = r_int[1:] - r_int[:-1]  # Assumes all radii represented
-    rind = np.where(deltar)[0]  # location of changed radius
-    nr = rind[1:] - rind[:-1]  # number of radius bin
-
-    # Cumulative sum to figure out sums for each radius bin
-    csim = np.cumsum(i_sorted, dtype=float)
-    tbin = csim[rind[1:]] - csim[rind[:-1]]
+    # Calculate the mean for each radius bin
+    tbin = np.bincount(r_int.ravel(), magnitude_spectrum.ravel())
+    nr = np.bincount(r_int.ravel())
 
     radial_prof = tbin / nr
 
