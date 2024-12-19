@@ -36,7 +36,6 @@ class FeatureExtraction:
         filename: str,
         crop: bool = True,
         freq_shift: bool = True,
-        interp: str = "cubic",
     ) -> list[float]:
         img = cv2.imread(filename, 0)
         height, width = img.shape[:2]
@@ -66,13 +65,7 @@ class FeatureExtraction:
             0, self.features, num=self.features
         )  # coordinates for interpolation
 
-        match interp:
-            case "cubic":
-                interpolated = scipy.interpolate.griddata(
-                    points, psd1D, xi, method="cubic"
-                )
-            case "linear":
-                interpolated = np.interp(xi, points, psd1D)
+        interpolated = scipy.interpolate.griddata(points, psd1D, xi, method="cubic")
 
         return interpolated
 
