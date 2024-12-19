@@ -8,13 +8,13 @@ dependencies = [
     "ipykernel",
     "icecream",
     "tqdm",
-    
     "matplotlib",
     "numpy",
     "pillow",
     "scipy",
-
     "imageforensics",
+    "pandas>=2.2.3",
+    "nb-clean>=4.0.1",
 ]
 
 [tool.uv]
