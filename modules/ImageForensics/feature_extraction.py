@@ -49,10 +49,16 @@ def azimuthalAverage(image, center=None):
 
 
 class FeatureExtraction:
-    def __init__(self, features=100):
+    def __init__(self, features: int = 100):
         self.features = features
 
-    def fft(self, filename, crop=True, freq_shift=True, interp="cubic"):
+    def fft(
+        self,
+        filename: str,
+        crop: bool = True,
+        freq_shift: bool = True,
+        interp: str = "cubic",
+    ) -> list[float]:
         img = cv2.imread(filename, 0)
         height, width = img.shape[:2]
 
@@ -91,7 +97,7 @@ class FeatureExtraction:
 
         return interpolated
 
-    def multithread_fft(self, filenames, **kwargs):
+    def multithread_fft(self, filenames: list[str], **kwargs) -> list[list[float]]:
         with Pool(processes=cpu_count()) as pool:
             results = list(
                 tqdm(
