@@ -1,0 +1,19 @@
+name: benford
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12
+
+  - ipykernel>=6.29.5
+  - icecream>=2.1.3
+  - tqdm>=4.67.1
+  - numpy>=2.2.0
+  - scikit-learn>=1.6.0
+  - pandas>=2.2.3
+  - nb-clean>=4.0.1
+  - pytorch>=2.5.1
+  - torchvision>=0.20.1
+
+  - pip
+  - pip:
+      - -e ./modules
