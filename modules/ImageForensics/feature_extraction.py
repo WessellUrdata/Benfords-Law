@@ -1,26 +1,32 @@
-from functools import partial
-from multiprocessing import Pool, cpu_count
-
-import cv2
-import numpy as np
-import scipy.interpolate
-from tqdm import tqdm
+import torch
+import torchvision.transforms.functional
 
 
-def azimuthalAverage(magnitude_spectrum: np.ndarray) -> np.ndarray:
+def azimuthalAverage(magnitude_spectrum: torch.Tensor) -> torch.Tensor:
+    device = magnitude_spectrum.device
+
+    height, width = magnitude_spectrum.size(1), magnitude_spectrum.size(2)
+
     # Calculate the indices from the image
-    y, x = np.indices(magnitude_spectrum.shape)
+    y, x = torch.meshgrid(
+        torch.arange(height, device=device),
+        torch.arange(width, device=device),
+        indexing="ij",
+    )
 
-    center_y, center_x = ((i - 1) / 2 for i in magnitude_spectrum.shape)
+    center_y, center_x = (
+        torch.tensor((height - 1) / 2, device=device),
+        torch.tensor((width - 1) / 2, device=device),
+    )
 
-    r = np.hypot(y - center_y, x - center_x)
+    r = torch.hypot(y - center_y, x - center_x)
 
     # Get the integer part of the radii (bin size = 1)
-    r_int = r.astype(int)
+    r_int = r.to(torch.int16)
 
     # Calculate the mean for each radius bin
-    tbin = np.bincount(r_int.ravel(), magnitude_spectrum.ravel())
-    nr = np.bincount(r_int.ravel())
+    tbin = torch.bincount(r_int.view(-1), magnitude_spectrum.view(-1))
+    nr = torch.bincount(r_int.view(-1))
 
     radial_prof = tbin / nr
 
@@ -33,48 +39,38 @@ class FeatureExtraction:
 
     def fft(
         self,
-        filename: str,
+        img: torch.Tensor,
         crop: bool = True,
-    ) -> list[float]:
-        img = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
-        height, width = img.shape
+    ):
+        height, width = img.size(dim=1), img.size(dim=2)
 
         if crop:
-            # we crop the center
-            height = height // 3
-            width = width // 3
-            img = img[height:-height, width:-width]
+            # crop to the center one-third of the image
+            img = torchvision.transforms.functional.crop(
+                img,
+                height // 3,
+                width // 3,
+                height // 3,
+                width // 3,
+            )
 
         # do FFT
-        frequencies = np.fft.fft2(img)
+        frequencies = torch.fft.fft2(img)
         # shift zero frequency component to center
         # not doing frequency shift will slightly negatively impact accuracy
-        frequencies = np.fft.fftshift(frequencies)
+        frequencies = torch.fft.fftshift(frequencies)
 
         # calculate magnitude spectrum
-        magnitude_spectrum = np.abs(frequencies)
+        magnitude_spectrum = torch.abs(frequencies)
 
         # Calculate the azimuthally averaged 1D power spectrum
         psd1D = azimuthalAverage(magnitude_spectrum)
 
-        points = np.linspace(
-            0, self.features, num=psd1D.size
-        )  # coordinates of points in psd1D
-        xi = np.linspace(
-            0, self.features, num=self.features
-        )  # coordinates for interpolation
-
-        interpolated = scipy.interpolate.griddata(points, psd1D, xi, method="cubic")
+        interpolated = torch.nn.functional.interpolate(
+            psd1D[None, None, :],
+            size=self.features,
+            mode="linear",
+            align_corners=False,
+        ).squeeze()
 
         return interpolated
-
-    def multithread_fft(self, filenames: list[str], **kwargs) -> list[list[float]]:
-        with Pool(processes=cpu_count()) as pool:
-            results = list(
-                tqdm(
-                    pool.imap(partial(self.fft, **kwargs), filenames),
-                    total=len(filenames),
-                    desc="Performing Feature Extraction",
-                )
-            )
-        return results
