@@ -66,11 +66,4 @@ class FeatureExtraction:
         # Calculate the azimuthally averaged 1D power spectrum
         psd1D = azimuthalAverage(magnitude_spectrum)
 
-        interpolated = torch.nn.functional.interpolate(
-            psd1D[None, None, :],
-            size=self.features,
-            mode="linear",
-            align_corners=False,
-        ).squeeze()
-
-        return interpolated
+        return psd1D
