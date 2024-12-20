@@ -52,16 +52,16 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
-    { name = "icecream" },
+    { name = "icecream", specifier = ">=2.1.3" },
     { name = "imageforensics", editable = "modules" },
-    { name = "ipykernel" },
-    { name = "matplotlib" },
+    { name = "ipykernel", specifier = ">=6.29.5" },
+    { name = "matplotlib", specifier = ">=3.10.0" },
     { name = "nb-clean", specifier = ">=4.0.1" },
-    { name = "numpy" },
+    { name = "numpy", specifier = ">=2.2.0" },
     { name = "pandas", specifier = ">=2.2.3" },
-    { name = "pillow" },
-    { name = "scipy" },
-    { name = "tqdm" },
+    { name = "pillow", specifier = ">=11.0.0" },
+    { name = "scipy", specifier = ">=1.14.1" },
+    { name = "tqdm", specifier = ">=4.67.1" },
 ]
 
 [[package]]
