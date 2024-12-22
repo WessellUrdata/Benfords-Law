@@ -55,16 +55,19 @@ class FeatureExtraction:
         # Calculate the azimuthally averaged 1D power spectrum
         psd1D = azimuthalAverage(magnitude_spectrum)
 
-        points = np.linspace(
-            0, self.features, num=psd1D.size
-        )  # coordinates of points in psd1D
-        xi = np.linspace(
-            0, self.features, num=self.features
-        )  # coordinates for interpolation
+        # if the extracted features isn't enough, interpolate them
+        if psd1D.size < features:
+            points = np.linspace(
+                0, features, num=psd1D.size
+            )  # coordinates of points in psd1D
+            xi = np.linspace(0, features, num=features)  # coordinates for interpolation
 
-        interpolated = scipy.interpolate.griddata(points, psd1D, xi, method="cubic")
+            interpolated = scipy.interpolate.griddata(points, psd1D, xi, method="cubic")
 
-        return interpolated
+            return interpolated
+
+        else:
+            return psd1D
 
     @staticmethod
     def multithread_fft(filenames: list[str], **kwargs) -> list[list[float]]:
