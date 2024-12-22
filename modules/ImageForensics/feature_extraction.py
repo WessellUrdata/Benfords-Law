@@ -28,12 +28,10 @@ def azimuthalAverage(magnitude_spectrum: np.ndarray) -> np.ndarray:
 
 
 class FeatureExtraction:
-    def __init__(self, features: int = 100):
-        self.features = features
-
+    @staticmethod
     def fft(
-        self,
         filename: str,
+        features: int = 300,
         crop: bool = True,
     ) -> list[float]:
         img = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
@@ -68,11 +66,12 @@ class FeatureExtraction:
 
         return interpolated
 
-    def multithread_fft(self, filenames: list[str], **kwargs) -> list[list[float]]:
+    @staticmethod
+    def multithread_fft(filenames: list[str], **kwargs) -> list[list[float]]:
         with Pool(processes=cpu_count()) as pool:
             results = list(
                 tqdm(
-                    pool.imap(partial(self.fft, **kwargs), filenames),
+                    pool.imap(partial(FeatureExtraction.fft, **kwargs), filenames),
                     total=len(filenames),
                     desc="Performing Feature Extraction",
                 )
